@@ -1,7 +1,10 @@
 class NoPhone < Sinatra::Base
-  before { validate }
+  get "/" do
+    erb :index
+  end
 
   post "/" do
+    validate
     halt 404 unless params["To"].is_a?(String)
 
     if params["CallStatus"] == "ringing" && match = params["To"].match(/sip:(.+)@#{Regexp.escape(ENV["TWILIO_SIP_ENDPOINT"])}/)
