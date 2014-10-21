@@ -2,7 +2,7 @@ class NoPhone < Sinatra::Base
   post "/" do
     halt 404 unless params["To"].is_a?(String)
 
-    if match = params["To"].match(/sip:(\d+)@#{Regexp.escape(ENV["TWILIO_SIP_ENDPOINT"])}/)
+    if match = params["To"].match(/sip:(\+?\d+)@#{Regexp.escape(ENV["TWILIO_SIP_ENDPOINT"])}/)
       builder do |xml|
         xml.Response do |r|
           r.Dial match[1]
