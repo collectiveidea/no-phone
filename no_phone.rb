@@ -5,7 +5,7 @@ class NoPhone < Sinatra::Base
     if params["CallStatus"] == "ringing" && match = params["To"].match(/sip:(\+?\d+)@#{Regexp.escape(ENV["TWILIO_SIP_ENDPOINT"])}/)
       builder do |xml|
         xml.Response do |r|
-          r.Dial match[1]
+          r.Dial match[1], callerId: ENV["TWILIO_NUMBER"]
         end
       end
     else
