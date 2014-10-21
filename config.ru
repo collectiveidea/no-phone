@@ -10,7 +10,7 @@ Honeybadger.configure do |config|
   config.ignore << "Sinatra::NotFound"
 end
 
-use Honeybadger::Rack
+use Honeybadger::Rack::ErrorNotifier
 
 require './no_phone'
 configure { set :server, :puma }
