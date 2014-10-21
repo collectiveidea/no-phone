@@ -27,10 +27,30 @@ class NoPhone < Sinatra::Base
     end
   end
 
+  post "/extension" do
+    # validate
+
+    case params["Digits"].to_i
+    when 123
+      builder do |xml|
+        xml.Response do |r|
+          r.Dial do |d|
+            d.Sip "sip:701@phone.collectiveidea.com" #, username: ENV["PBX_USERNAME"], password: ENV["PBX_PASSWORD"]
+          end
+        end
+      end
+    else
+      hangup
+    end
+  end
+
   def message
     builder do |xml|
       xml.Response do |r|
-        r.Say "Welcome to Collective Idea. For more information, please email us at info@collectiveidea.com", voice: "alice"
+        r.Gather timeout: 10, action: "/extension" do |g|
+          g.Say "Welcome to Collective Idea. If you know your party's extension, enter it followed by the pound sign. For more information, please email us at info@collectiveidea.com.", voice: "alice"
+        end
+        r.Hangup
       end
     end
   end
