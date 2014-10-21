@@ -2,7 +2,7 @@ class NoPhone < Sinatra::Base
   post "/" do
     halt 404 unless params["To"].is_a?(String)
 
-    if params["CallStatus"] == "ringing" && match = params["To"].match(/sip:(\+?\d+)@collectiveidea.sip.twilio.com/)
+    if params["CallStatus"] == "ringing" && match = params["To"].match(/sip:(.+)@collectiveidea.sip.twilio.com/)
       builder do |xml|
         xml.Response do |r|
           r.Dial match[1], callerId: "+1-616-499-2122"
