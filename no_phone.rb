@@ -1,4 +1,6 @@
 class NoPhone < Sinatra::Base
+  before { validate }
+
   post "/" do
     halt 404 unless params["To"].is_a?(String)
 
@@ -29,5 +31,17 @@ class NoPhone < Sinatra::Base
         r.Hangup
       end
     end
+  end
+
+  private
+
+  def validate
+    auth_token = ENV["TWILIO_AUTH_TOKEN"]
+    # the callback URL you provided to Twilio
+    url = ENV["TWILIO_CALLBACK_URL"]
+    # X-Twilio-Signature header value, rewritten by Rack
+    signature = request.env["HTTP_X_TWILIO_SIGNATURE"]
+    validator = Twilio::Util::RequestValidator.new(auth_token)
+    halt 401 unless validator.validate(url, params, signature)
   end
 end
