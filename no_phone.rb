@@ -8,8 +8,18 @@ class NoPhone < Sinatra::Base
           r.Dial match[1], callerId: ENV["TWILIO_NUMBER"]
         end
       end
+    elsif params["To"] == ENV["TWILIO_NUMBER"]
+      message
     else
       hangup
+    end
+  end
+
+  def message
+    builder do |xml|
+      xml.Response do |r|
+        r.Say "Welcome to Collective Idea. For more information, please email us at info@collectiveidea.com", voice: "alice"
+      end
     end
   end
 
