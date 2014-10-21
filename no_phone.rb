@@ -1,6 +1,8 @@
 class NoPhone < Sinatra::Base
   post "/" do
-    if params["To"].present? && match = params["To"].match(/sip:(\d+)@collectiveidea.sip.twilio.com/)
+    halt 404 unless params["To"].is_a?(String)
+
+    if match = params["To"].match(/sip:(\d+)@collectiveidea.sip.twilio.com/)
       builder do |xml|
         xml.Response do |r|
           r.Dial match[1]
