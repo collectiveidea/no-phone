@@ -34,7 +34,7 @@ class NoPhone < Sinatra::Base
       builder do |xml|
         xml.Response do |r|
           r.Dial do |d|
-            d.Sip "sip:#{extension}@phone.collectiveidea.com" #, username: ENV["PBX_USERNAME"], password: ENV["PBX_PASSWORD"]
+            d.Sip "sip:#{extension}@#{ENV["PBX_HOST"]}" #, username: ENV["PBX_USERNAME"], password: ENV["PBX_PASSWORD"]
           end
         end
       end
