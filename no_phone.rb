@@ -30,12 +30,11 @@ class NoPhone < Sinatra::Base
   post "/extension" do
     # validate
 
-    case params["Digits"].to_i
-    when 123
+    if extension = params["Digits"].to_i
       builder do |xml|
         xml.Response do |r|
           r.Dial do |d|
-            d.Sip "sip:701@phone.collectiveidea.com" #, username: ENV["PBX_USERNAME"], password: ENV["PBX_PASSWORD"]
+            d.Sip "sip:#{extension}@phone.collectiveidea.com" #, username: ENV["PBX_USERNAME"], password: ENV["PBX_PASSWORD"]
           end
         end
       end
