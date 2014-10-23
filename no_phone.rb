@@ -30,7 +30,20 @@ class NoPhone < Sinatra::Base
   post "/extension" do
     # validate
 
-    if extension = params["Digits"].to_i
+    extension = params["Digits"].to_i
+    case extension
+    when 7
+      builder do |xml|
+        xml.Response do |r|
+          r.Gather timeout: 10, action: "/extension" do |g|
+            g.Say "Bienvenido a", voice: "alice", language: "es-ES"
+            g.Say "Collective Idea.", voice: "alice", language: "en-US"
+            g.Say "Si conoce la extensión de su partido, entrar en él seguido por el signo de número. Para obtener más información, por favor envíenos un email a info@collectiveidea.com.", voice: "alice", language: "es-ES"
+          end
+          r.Hangup
+        end
+      end
+    when (1..1000)
       builder do |xml|
         xml.Response do |r|
           r.Dial do |d|
@@ -48,6 +61,7 @@ class NoPhone < Sinatra::Base
       xml.Response do |r|
         r.Gather timeout: 10, action: "/extension" do |g|
           g.Say "Welcome to Collective Idea. If you know your party's extension, enter it followed by the pound sign. For more information, please email us at info@collectiveidea.com.", voice: "alice"
+          g.Say "Para español marque siete y la tecla numeral por favor.", voice: "alice", language: "es-ES"
         end
         r.Hangup
       end
