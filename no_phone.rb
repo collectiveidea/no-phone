@@ -27,6 +27,16 @@ class NoPhone < Sinatra::Base
     end
   end
 
+  post "/sms" do
+    # validate
+
+    builder do |xml|
+      xml.Response do |r|
+        r.Message "Thanks for contacting [i] Collective Idea. Please visit http://collectiveidea.com"
+      end
+    end
+  end
+
   post "/extension" do
     # validate
 
