@@ -5,7 +5,7 @@ class Emailer
 
   def voicemail_notification(url, duration)
     message = {
-      "html" => "A new voicemail has arrived!\n\nListen to it here: #{url}\n#{duration} seconds long.",
+      "text" => "A new voicemail has arrived!\n\nListen to it here: #{url}\n#{duration} seconds long.",
       "subject" => "New Voicemail",
       "from_email" => "no-phone@collectiveidea.com",
       "from_name" => "No Phone",
