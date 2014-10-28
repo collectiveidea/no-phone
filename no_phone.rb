@@ -18,7 +18,7 @@ class NoPhone < Sinatra::Base
           end
         end
       elsif params["To"] == ENV["TWILIO_NUMBER"]
-        message
+        welcome
       else
         hangup
       end
@@ -37,22 +37,40 @@ class NoPhone < Sinatra::Base
     end
   end
 
+  post "/menu" do
+    validate
+
+    extension = params["Digits"].to_i
+    case extension
+    when 1
+      # Harmony or DMS
+      builder do |xml|
+        xml.Response do |r|
+          leave_a_message(r)
+          r.Hangup
+        end
+      end
+    when 2
+      # All other
+      builder do |xml|
+        xml.Response do |r|
+          r.Gather timeout: 10, numDigits: 3, action: "/extension" do |g|
+            g.Play sound_url("extension")
+          end
+          leave_a_message(r)
+          r.Hangup
+        end
+      end
+    else
+      hangup
+    end
+  end
+
   post "/extension" do
     validate
 
     extension = params["Digits"].to_i
     case extension
-    when 7
-      builder do |xml|
-        xml.Response do |r|
-          r.Gather timeout: 10, action: "/extension" do |g|
-            g.Say "Bienvenido a", voice: "alice", language: "es-ES"
-            g.Say "Collective Idea.", voice: "alice", language: "en-US"
-            g.Say "Si conoce la extensión de su partido, entrar en él seguido por el signo de número. Para obtener más información, por favor envíenos un email a info@collectiveidea.com.", voice: "alice", language: "es-ES"
-          end
-          r.Hangup
-        end
-      end
     when (1..1000)
       builder do |xml|
         xml.Response do |r|
@@ -66,12 +84,26 @@ class NoPhone < Sinatra::Base
     end
   end
 
-  def message
+  post "/voicemail" do
+    validate
+
+    puts "YOU'VE GOT MAIL! #{params["RecordingUrl"]}"
+    empty_response
+  end
+
+  private
+
+  def leave_a_message(xml)
+    xml.Play sound_url("unavailable")
+    xml.Record maxLength: 300, action: "/voicemail"
+    nil
+  end
+
+  def welcome
     builder do |xml|
       xml.Response do |r|
-        r.Gather timeout: 10, action: "/extension" do |g|
-          g.Say "Welcome to Collective Idea. If you know your party's extension, enter it followed by the pound sign. For more information, please email us at info@collectiveidea.com.", voice: "alice"
-          g.Say "Para español marque siete y la tecla numeral por favor.", voice: "alice", language: "es-ES"
+        r.Gather timeout: 5, action: "/menu", numDigits: "1" do |g|
+          g.Play sound_url("welcome")
         end
         r.Hangup
       end
@@ -92,7 +124,9 @@ class NoPhone < Sinatra::Base
     end
   end
 
-  private
+  def sound_url(sound)
+    ENV["TWILIO_CALLBACK_URL"] + "/#{sound}.mp3"
+  end
 
   def validate
     auth_token = ENV["TWILIO_AUTH_TOKEN"]
