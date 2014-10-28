@@ -28,7 +28,7 @@ class NoPhone < Sinatra::Base
   end
 
   post "/sms" do
-    # validate
+    validate
 
     builder do |xml|
       xml.Response do |r|
@@ -38,7 +38,7 @@ class NoPhone < Sinatra::Base
   end
 
   post "/extension" do
-    # validate
+    validate
 
     extension = params["Digits"].to_i
     case extension
@@ -97,7 +97,7 @@ class NoPhone < Sinatra::Base
   def validate
     auth_token = ENV["TWILIO_AUTH_TOKEN"]
     # the callback URL you provided to Twilio
-    url = ENV["TWILIO_CALLBACK_URL"]
+    url = ENV["TWILIO_CALLBACK_URL"] + request.fullpath
     # X-Twilio-Signature header value, rewritten by Rack
     signature = request.env["HTTP_X_TWILIO_SIGNATURE"]
     validator = Twilio::Util::RequestValidator.new(auth_token)
