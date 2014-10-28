@@ -2,10 +2,14 @@ GEM
   remote: https://rubygems.org/
   specs:
     builder (3.2.2)
+    excon (0.39.6)
     honeybadger (1.16.5)
       json
     json (1.8.1)
     jwt (1.0.0)
+    mandrill-api (1.0.52)
+      excon (>= 0.16.0, < 1.0)
+      json (>= 1.7.7, < 2.0)
     multi_json (1.10.1)
     puma (2.9.1)
       rack (>= 1.1, < 2.0)
@@ -29,6 +33,7 @@ PLATFORMS
 DEPENDENCIES
   builder
   honeybadger
+  mandrill-api
   puma
   rack-ssl-enforcer
   sinatra

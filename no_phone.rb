@@ -1,3 +1,5 @@
+require './emailer'
+
 class NoPhone < Sinatra::Base
   get "/" do
     erb :index
@@ -87,7 +89,8 @@ class NoPhone < Sinatra::Base
   post "/voicemail" do
     validate
 
-    puts "YOU'VE GOT MAIL! #{params["RecordingUrl"]}"
+    puts "YOU'VE GOT MAIL! #{params["RecordingUrl"]} #{params["RecordingDuration"]} seconds"
+    Emailer.new.voicemail_notification(params["RecordingUrl"], params["RecordingDuration"])
     empty_response
   end
 
