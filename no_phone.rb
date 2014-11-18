@@ -13,17 +13,7 @@ class NoPhone < Sinatra::Base
     when "completed"
       empty_response
     when "ringing"
-      if match = params["To"].match(/sip:(.+)@#{Regexp.escape(ENV["TWILIO_SIP_ENDPOINT"])}/)
-        builder do |xml|
-          xml.Response do |r|
-            r.Dial match[1], callerId: ENV["TWILIO_NUMBER"]
-          end
-        end
-      elsif params["To"] == ENV["TWILIO_NUMBER"]
-        welcome
-      else
-        hangup
-      end
+      welcome
     else
       hangup
     end
