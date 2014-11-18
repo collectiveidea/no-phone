@@ -5,6 +5,7 @@ class NoPhone < Sinatra::Base
     erb :index
   end
 
+  # Incoming Call
   post "/" do
     validate
     halt 404 unless params["To"].is_a?(String)
@@ -19,6 +20,7 @@ class NoPhone < Sinatra::Base
     end
   end
 
+  # Incoming SMS
   post "/sms" do
     validate
 
@@ -29,6 +31,7 @@ class NoPhone < Sinatra::Base
     end
   end
 
+  # Caller selected a menu item
   post "/menu" do
     validate
 
