@@ -13,17 +13,7 @@ class NoPhone < Sinatra::Base
     when "completed"
       empty_response
     when "ringing"
-      if match = params["To"].match(/sip:(.+)@collectiveidea.sip.twilio.com/)
-        builder do |xml|
-          xml.Response do |r|
-            r.Dial match[1], callerId: "+1-616-499-2122"
-          end
-        end
-      elsif params["To"] == "+16164992122"
-        welcome
-      else
-        hangup
-      end
+      welcome
     else
       hangup
     end
