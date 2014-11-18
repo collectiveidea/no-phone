@@ -1,128 +1,69 @@
 require './emailer'
 
 class NoPhone < Sinatra::Base
+  helpers do
+    def sound_url(sound)
+      ENV["TWILIO_CALLBACK_URL"].to_s + "/#{sound}.mp3"
+    end
+  end
+
+  before do
+    validate unless request.env["REQUEST_METHOD"] == "GET"
+    @digits = params["Digits"].to_i if params["Digits"]
+  end
+
   get "/" do
     erb :index
   end
 
   # Incoming Call
   post "/" do
-    validate
     halt 404 unless params["To"].is_a?(String)
 
     case params["CallStatus"]
     when "completed"
-      empty_response
+      builder :empty_response
     when "ringing"
-      welcome
+      builder :welcome
     else
-      hangup
+      builder :hangup
     end
   end
 
   # Incoming SMS
   post "/sms" do
-    validate
-
-    builder do |xml|
-      xml.Response do |r|
-        r.Message "Thanks for contacting [i] Collective Idea. Please visit http://collectiveidea.com"
-      end
-    end
+    builder :sms
   end
 
   # Caller selected a menu item
   post "/menu" do
-    validate
-
-    extension = params["Digits"].to_i
-    case extension
+    case @digits
     when 1
       # Harmony or DMS
-      builder do |xml|
-        xml.Response do |r|
-          leave_a_message(r)
-          r.Hangup
-        end
-      end
+      builder :leave_a_message
     when 2
       # All other
-      builder do |xml|
-        xml.Response do |r|
-          r.Gather timeout: 10, numDigits: 3, action: "/extension" do |g|
-            g.Play sound_url("extension")
-          end
-          leave_a_message(r)
-          r.Hangup
-        end
-      end
+      builder :menu
     else
-      hangup
+      builder :hangup
     end
   end
 
   post "/extension" do
-    validate
-
-    extension = params["Digits"].to_i
-    case extension
-    when (1..1000)
-      builder do |xml|
-        xml.Response do |r|
-          r.Dial do |d|
-            d.Sip "sip:#{extension}@#{ENV["PBX_HOST"]}", username: ENV["PBX_USERNAME"], password: ENV["PBX_PASSWORD"]
-          end
-        end
-      end
+    if @digits
+      builder :extension
     else
-      hangup
+      builder :hangup
     end
   end
 
   post "/voicemail" do
-    validate
-
     puts "YOU'VE GOT MAIL! #{params["RecordingUrl"]} #{params["RecordingDuration"]} seconds"
     Emailer.new.voicemail_notification(params["RecordingUrl"], params["RecordingDuration"])
-    empty_response
+    builder :empty_response
   end
 
   private
-
-  def leave_a_message(xml)
-    xml.Play sound_url("unavailable")
-    xml.Record maxLength: 300, action: "/voicemail"
-    nil
-  end
-
-  def welcome
-    builder do |xml|
-      xml.Response do |r|
-        r.Gather timeout: 5, action: "/menu", numDigits: "1" do |g|
-          g.Play sound_url("welcome")
-        end
-        r.Hangup
-      end
-    end
-  end
-
-  def hangup
-    builder do |xml|
-      xml.Response do |r|
-        r.Hangup
-      end
-    end
-  end
-
-  def empty_response
-    builder do |xml|
-      xml.Response
-    end
-  end
-
-  def sound_url(sound)
-    ENV["TWILIO_CALLBACK_URL"] + "/#{sound}.mp3"
-  end
 
   def validate
     auth_token = ENV["TWILIO_AUTH_TOKEN"]
