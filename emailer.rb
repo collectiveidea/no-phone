@@ -1,19 +1,18 @@
 class Emailer
   def initialize
-    @mandrill = Mandrill::API.new(ENV["MANDRILL_API_KEY"])
+    @client = SendGrid::Client.new(api_key: ENV["SENDGRID_API_KEY"])
   end
 
   def voicemail_notification(url, duration)
-    message = {
-      "text" => "A new voicemail has arrived!\n\nListen to it here: #{url}\n#{duration} seconds long.",
-      "subject" => "New Voicemail",
-      "from_email" => ENV["EMAIL_FROM"],
-      "from_name" => "No Phone",
-      "to" => [{"email" => ENV["EMAIL_TO"],
-        "name" => "Collective Idea",
-        "type" => "to"}],
-      "auto_html" => true,
-    }
-    @mandrill.messages.send(message)
+    body = "A new voicemail has arrived!\n\nListen to it here: #{url}\n#{duration} seconds long."
+    message = SendGrid::Mail.new(
+      to: ENV["EMAIL_TO"],
+      from: ENV["EMAIL_FROM"],
+      subject: "New Voicemail",
+      text: body,
+      html: body.gsub(/\n/, '<br>')
+    )
+    response = @client.send(message)
+    raise "#{response.code}: #{response.body}" if response.code != 200
   end
 end
