@@ -44,6 +44,8 @@ class NoPhone < Sinatra::Base
     when 2
       # All other
       builder :menu
+    when ENV["EXTENSION_#{@digits}"]
+      builder :extension
     else
       builder :hangup
     end
