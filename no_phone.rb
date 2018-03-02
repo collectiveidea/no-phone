@@ -75,7 +75,7 @@ class NoPhone < Sinatra::Base
     url = ENV["TWILIO_CALLBACK_URL"] + request.fullpath
     # X-Twilio-Signature header value, rewritten by Rack
     signature = request.env["HTTP_X_TWILIO_SIGNATURE"]
-    validator = Twilio::Util::RequestValidator.new(auth_token)
+    validator = Twilio::Security::RequestValidator.new(auth_token)
     halt 401 unless validator.validate(url, params, signature)
   end
 end
