@@ -50,7 +50,7 @@ class NoPhone < Sinatra::Base
   end
 
   post "/extension" do
-    if @digits
+    if ENV["EXTENSION_#{@digits}"]
       builder :extension
     else
       builder :hangup
