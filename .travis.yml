@@ -1,0 +1,15 @@
+language: ruby
+rvm:
+  - 2.5.0
+sudo: false
+branches:
+  only:
+    - master
+script:
+  - ruby test/no_phone_test.rb
+notifications:
+  webhooks:
+    urls:
+      - https://buildlight.collectiveidea.com/
+    on_start: always
+cache: bundler
