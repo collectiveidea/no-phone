@@ -76,6 +76,9 @@ class NoPhone < Sinatra::Base
     # X-Twilio-Signature header value, rewritten by Rack
     signature = request.env["HTTP_X_TWILIO_SIGNATURE"]
     validator = Twilio::Security::RequestValidator.new(auth_token)
-    halt 401 unless validator.validate(url, params, signature)
+    # "captures" key gets added to the params. we need to remove it for validation
+    twilio_params = params.clone
+    twilio_params.delete("captures")
+    halt 401 unless validator.validate(url, twilio_params, signature)
   end
 end

@@ -22,7 +22,7 @@ class HelloWorldTest < Test::Unit::TestCase
   # Build the proper signature from the url & params
   def params_and_signature(url, params)
     validator = Twilio::Security::RequestValidator.new(ENV["TWILIO_AUTH_TOKEN"])
-    signature = validator.build_signature_for(url, params.merge(captures: []))
+    signature = validator.build_signature_for(url, params)
     [url, params, "HTTP_X_TWILIO_SIGNATURE" => signature]
   end
 
