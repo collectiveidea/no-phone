@@ -11,11 +11,14 @@ GEM
     mustermann (1.0.2)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
+    power_assert (1.1.1)
     puma (3.11.2)
     rack (2.0.4)
     rack-protection (2.0.1)
       rack
     rack-ssl-enforcer (0.2.9)
+    rack-test (0.8.3)
+      rack (>= 1.0, < 3)
     ruby_http_client (3.3.0)
     sendgrid-ruby (5.2.0)
       ruby_http_client (~> 3.2)
@@ -25,6 +28,8 @@ GEM
       rack (~> 2.0)
       rack-protection (= 2.0.1)
       tilt (~> 2.0)
+    test-unit (3.2.7)
+      power_assert
     tilt (2.0.8)
     twilio-ruby (5.6.4)
       faraday (~> 0.9)
@@ -39,8 +44,10 @@ DEPENDENCIES
   honeybadger
   puma
   rack-ssl-enforcer
+  rack-test
   sendgrid-ruby
   sinatra
+  test-unit
   twilio-ruby
 
 RUBY VERSION
