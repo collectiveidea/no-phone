@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     builder (3.2.3)
-    faraday (0.14.0)
+    faraday (0.15.0)
       multipart-post (>= 1.2, < 3)
     honeybadger (3.3.0)
     jwt (2.1.0)
@@ -12,12 +12,12 @@ GEM
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
     power_assert (1.1.1)
-    puma (3.11.3)
-    rack (2.0.4)
+    puma (3.11.4)
+    rack (2.0.5)
     rack-protection (2.0.1)
       rack
     rack-ssl-enforcer (0.2.9)
-    rack-test (0.8.3)
+    rack-test (1.0.0)
       rack (>= 1.0, < 3)
     ruby_http_client (3.3.0)
     sendgrid-ruby (5.2.0)
@@ -31,7 +31,7 @@ GEM
     test-unit (3.2.7)
       power_assert
     tilt (2.0.8)
-    twilio-ruby (5.7.0)
+    twilio-ruby (5.8.1)
       faraday (~> 0.9)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
