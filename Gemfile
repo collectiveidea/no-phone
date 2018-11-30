@@ -10,6 +10,8 @@ gem "rack-ssl-enforcer"
 gem "sendgrid-ruby"
 gem "twilio-ruby"
 
+gem "standard"
+
 group :test do
   gem "test-unit"
   gem "rack-test"
