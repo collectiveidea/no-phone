@@ -32,20 +32,20 @@ class HelloWorldTest < Test::Unit::TestCase
   end
 
   def test_phone_call
-    post *params_and_signature("/", To: "+15555555555", CallStatus: "ringing")
+    post(*params_and_signature("/", To: "+15555555555", CallStatus: "ringing"))
     assert last_response.ok?
     assert_match "<Play>/welcome.mp3</Play>", last_response.body
   end
 
   def test_menu
-    post *params_and_signature("/menu", To: "+15555555555", Digits: "1")
+    post(*params_and_signature("/menu", To: "+15555555555", Digits: "1"))
     assert last_response.ok?
     assert_match "<Play>/unavailable.mp3</Play>", last_response.body
   end
 
   def test_extensions
     ENV["EXTENSION_4"] = "123-4567"
-    post *params_and_signature("/menu", To: "+15555555555", Digits: "4")
+    post(*params_and_signature("/menu", To: "+15555555555", Digits: "4"))
     assert last_response.ok?
     assert_match "<Number>123-4567</Number>", last_response.body
   end
