@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "2.5.0"
+ruby "2.5.3"
 
 gem "sinatra"
 gem "builder"
@@ -9,6 +9,8 @@ gem "puma"
 gem "rack-ssl-enforcer"
 gem "sendgrid-ruby"
 gem "twilio-ruby"
+
+gem "standard"
 
 group :test do
   gem "test-unit"
