@@ -1,4 +1,4 @@
-require './emailer'
+require "./emailer"
 
 class NoPhone < Sinatra::Base
   helpers do
