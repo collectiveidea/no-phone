@@ -8,4 +8,4 @@ This is purposely minimal and unexciting. However, feel free to use, change, and
 
 Using it? Tell us how and where. We'd love to hear!
 
-© 2014-2018, 2022 [Collective Idea](http://collectiveidea.com/)
+© 2014-2018, 2022 [Collective Idea](https://collectiveidea.com/)
