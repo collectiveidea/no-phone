@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      RAILS_ENV: test
       RUBYOPT: --enable=frozen-string-literal
 
     steps:
@@ -21,7 +20,9 @@ jobs:
       with:
         ruby-version: 3.1.1
         bundler-cache: true
-    - uses: actions/cache@v1
+
+    - name: Run Standard
+      run: bundle exec standardrb
 
     - name: Run Tests
       run: ruby test/no_phone_test.rb
