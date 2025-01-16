@@ -8,4 +8,12 @@ This is purposely minimal and unexciting. However, feel free to use, change, and
 
 Using it? Tell us how and where. We'd love to hear!
 
+## Configuration
+
+### FORWARD_PHONE_TO
+
+Set this to a phone number to temporarily forward all calls to that number.
+Must include area code and not have any spaces or other special characters
+(e.g. 5558675309).
+
 © 2014-2018, 2022 [Collective Idea](https://collectiveidea.com/)
