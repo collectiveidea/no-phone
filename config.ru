@@ -5,8 +5,12 @@ Bundler.require
 
 use Rack::SslEnforcer if ENV["RACK_ENV"] == "production"
 
-Honeybadger.exception_filter do |notice|
-  notice[:exception].class < Sinatra::NotFound
+Honeybadger.configure do |config|
+  config.before_notify do |notice|
+    if notice.exception.class < Sinatra::NotFound
+      notice.halt!
+    end
+  end
 end
 
 require "./no_phone"
