@@ -1,4 +1,5 @@
-require "./emailer"
+require_relative "emailer"
+require "twilio-ruby"
 
 class NoPhone < Sinatra::Base
   helpers do
@@ -32,7 +33,11 @@ class NoPhone < Sinatra::Base
 
   # Incoming SMS
   post "/sms" do
-    builder :sms
+    content_type "text/xml"
+
+    Twilio::TwiML::MessagingResponse.new do |r|
+      r.message body: "Thanks for contacting [i] Collective Idea. Please visit http://collectiveidea.com"
+    end.to_s
   end
 
   # Caller selected a menu item
