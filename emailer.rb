@@ -18,4 +18,19 @@ class Emailer
     response = @sendgrid.client.mail._("send").post(request_body: message.to_json)
     raise "#{response.status_code}: #{response.body}" if response.status_code != "202"
   end
+
+  def sms_notification(phone_number, body)
+    message = SendGrid::Mail.new
+    message.from = SendGrid::Email.new(email: ENV["EMAIL_FROM"])
+    message.subject = "New SMS from #{phone_number}"
+
+    personalization = SendGrid::Personalization.new
+    personalization.add_to(SendGrid::Email.new(email: ENV["EMAIL_TO"]))
+    message.add_personalization(personalization)
+
+    message.add_content(SendGrid::Content.new(type: "text/plain", value: body))
+
+    response = @sendgrid.client.mail._("send").post(request_body: message.to_json)
+    raise "#{response.status_code}: #{response.body}" if response.status_code != "202"
+  end
 end

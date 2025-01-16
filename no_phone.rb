@@ -35,9 +35,11 @@ class NoPhone < Sinatra::Base
   post "/sms" do
     content_type "text/xml"
 
-    Twilio::TwiML::MessagingResponse.new do |r|
-      r.message body: "Thanks for contacting [i] Collective Idea. Please visit http://collectiveidea.com"
-    end.to_s
+    Emailer.new.tap do |email|
+      email.sms_notification(params["From"], params["Body"])
+    end
+
+    Twilio::TwiML::MessagingResponse.new.to_s
   end
 
   # Caller selected a menu item
